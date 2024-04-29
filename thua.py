@@ -17,8 +17,7 @@ def speak(text):
     os.remove(filename)
 
 def tell_story():
-    story = "Có một lần, ở một vương quốc xa xôi, có một chàng hoàng tử tài giỏi và một nàng công chúa xinh đẹp..."
-    speak(story)
+   return "Có một lần, ở một vương quốc xa xôi, có một chàng hoàng tử tài giỏi và một nàng công chúa xinh đẹp..."
 
 def get_weather_in_haiphong():
     api_key = "719971eee2ed82878b782010d7de5792"
@@ -52,7 +51,7 @@ def main():
                 text = r.recognize_google(audio_data, language="vi")
             except sr.UnknownValueError:
                 text = ""
-            
+            print("------"+text)
             if text == "":
                 robot_brain = "Bạn có cần hỗ trợ thêm không "
             elif "Chào minh" in text:
@@ -62,7 +61,7 @@ def main():
             elif "nóng" in text:
                 robot_brain = "Đủ để ướt áo ạ"
             elif "kể chuyện" in text:
-                tell_story()
+                robot_brain =  tell_story()
             elif "Mấy giờ rồi" in text:
                 robot_brain = now.strftime("%H:%M:%S")  
             elif "đau đầu" in text:
@@ -71,10 +70,10 @@ def main():
                 robot_brain = "Bạn nên kẹp nhiệt độ nếu quá mức cho phép bạn cần đến bác sĩ ngay"
             elif "thời tiết" in text:
                 speak("Bạn muốn hỏi thời tiết ở thành phố nào?")
-                city = input("Thành phố: Hải Phòng ")
+                # city = input("Thành phố: Hải Phòng ")
+                print("Thành phố: Hải Phòng ")
                 weather_info = get_weather_in_haiphong()
                 robot_brain = weather_info
-                speak(robot_brain)
             elif "tạm biệt" in text:
                 robot_brain = "Hẹn gặp lại bạn sau"
                 break
