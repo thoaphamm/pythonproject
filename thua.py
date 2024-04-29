@@ -17,7 +17,7 @@ def speak(text):
     os.remove(filename)
 
 def tell_story():
-   return "Có một lần, ở một vương quốc xa xôi, có một chàng hoàng tử tài giỏi và một nàng công chúa xinh đẹp..."
+   return "Có một lần, ở một vương quốc xa xôi, có một chàng hoàng tử tài giỏi và một nàng công chúa xinh đẹp...."
 
 def get_weather_in_haiphong():
     api_key = "719971eee2ed82878b782010d7de5792"
