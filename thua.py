@@ -56,9 +56,9 @@ def main():
                 text = ""
             print("------"+text)
             if text == "":
-                robot_brain = "Bạn có cần hỗ trợ thêm không "
-            elif "Chào minh" in text:
-                robot_brain = "Em đây ạ,bạn cần tôi giúp gì ạ?"
+                robot_brain = "Chào minh "
+            elif "Xin chào" in text:
+                robot_brain = "Em đây ạ,bạn cần em giúp gì ạ?"
             elif "ngày" in text:
                 robot_brain = now.strftime("%d/%m/%Y")
             elif "nóng" in text:
@@ -81,7 +81,7 @@ def main():
                 robot_brain = "Hẹn gặp lại bạn sau"
                 break
             else:
-                robot_brain = "Chào minh,bạn cần giúp gì ạ"
+                robot_brain = "Bạn cần giúp gì thế ạ"
 
             print(robot_brain)
             speak(robot_brain)
