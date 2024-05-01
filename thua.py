@@ -14,10 +14,10 @@ def speak(text):
     tts = gTTS(text=text, lang='vi')
     filename = 'output.mp3'
     tts.save(filename)
-    mixer.music.load(filename)
-    mixer.music.play()
-    # playsound.playsound(filename)
-    # os.remove(filename)
+    # mixer.music.load(filename)
+    # mixer.music.play()
+    playsound.playsound(filename)
+    os.remove(filename)
 
 def tell_story():
    return "Có một lần, ở một vương quốc xa xôi, có một chàng hoàng tử tài giỏi và một nàng công chúa xinh đẹp......"
