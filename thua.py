@@ -5,6 +5,7 @@ import requests
 import os
 import playsound
 from datetime import datetime
+import requests
 from pygame import mixer
 now = datetime.now()
 r = sr.Recognizer()
@@ -44,6 +45,32 @@ def get_weather_in_haiphong():
     else:
         return "Không thể lấy thông tin thời tiết."
 
+def chatGPT(text):
+    url = "https://api.openai.com/v1/completions"
+    api_key = ""
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + api_key
+    }
+
+    prompt = text
+    data = {
+        "model": "gpt-3.5-turbo",
+        "prompt": prompt,
+        "max_tokens": 50
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+
+    if response.status_code == 200:
+        completion = response.json()["choices"][0]["text"]
+        print(completion)
+        return completion
+        #CÂU TRẢ LỜI
+    else:
+        print("Error:", response.status_code)
+        return "Loi" + response.status_code
 def main():
     robot_brain = ""
     while True:
@@ -77,6 +104,10 @@ def main():
                 print("Thành phố: Hải Phòng ")
                 weather_info = get_weather_in_haiphong()
                 robot_brain = weather_info
+            elif "gpt" in text:
+                speak("Moi ban dat cau hoi cho AI")
+                audio_data = r.record(source, duration=5)
+                robot_brain =  chatGPT(text=audio_data)
             elif "tạm biệt" in text:
                 robot_brain = "Hẹn gặp lại bạn sau"
                 break
