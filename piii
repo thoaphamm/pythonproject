@@ -1,0 +1,90 @@
+import speech_recognition as sr
+from gtts import gTTS
+import pygame
+import requests
+import os
+import playsound
+from datetime import datetime
+from pygame import mixer
+now = datetime.now()
+r = sr.Recognizer()
+mixer.init()
+
+def speak(text):
+    tts = gTTS(text=text, lang='vi')
+    filename = 'output.mp3'
+    tts.save(filename)
+    mixer.music.load(filename)
+    mixer.music.play()
+    # playsound.playsound(filename)
+    # os.remove(filename)
+
+def tell_story():
+   return "CÃ³ má»t láº§n, á» má»t vÆ°Æ¡ng quá»c xa xÃ´i, cÃ³ má»t chÃ ng hoÃ ng tá»­ tÃ i giá»i vÃ  má»t nÃ ng cÃ´ng chÃºa xinh Äáº¹p...."
+
+def get_weather_in_haiphong():
+    api_key = "719971eee2ed82878b782010d7de5792"
+    city = "Háº£i PhÃ²ng"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric&lang=vi"
+    response = requests.get(url)
+    data = response.json()
+
+    if response.status_code == 200:
+        weather_description = data["weather"][0]["description"]
+        temperature = data["main"]["temp"]
+        humidity = data["main"]["humidity"]
+
+        weather_info = f"""
+        Thá»i tiáº¿t á» Háº£i PhÃ²ng hiá»n táº¡i:
+        - Tráº¡ng thÃ¡i: {weather_description}
+        - Nhiá»t Äá»: {temperature} Â°C
+        - Äá» áº©m: {humidity} %
+        """
+        return weather_info
+    else:
+        return "KhÃ´ng thá» láº¥y thÃ´ng tin thá»i tiáº¿t."
+
+def main():
+    robot_brain = ""
+    while True:
+        with sr.Microphone() as source:
+            print("ChÃ o minh,báº¡n cáº§n tÃ´i giÃºp gÃ¬?")
+            audio_data = r.record(source, duration=5)
+            try:
+                text = r.recognize_google(audio_data, language="vi")
+            except sr.UnknownValueError:
+                text = ""
+            print("------"+text)
+            if text == "":
+                robot_brain = "Báº¡n cÃ³ cáº§n há» trá»£ thÃªm khÃ´ng "
+            elif "ChÃ o minh" in text:
+                robot_brain = "Em ÄÃ¢y áº¡,báº¡n cáº§n tÃ´i giÃºp gÃ¬ áº¡?"
+            elif "ngÃ y" in text:
+                robot_brain = now.strftime("%d/%m/%Y")
+            elif "nÃ³ng" in text:
+                robot_brain = "Äá»§ Äá» Æ°á»t Ã¡o áº¡"
+            elif "ká» chuyá»n" in text:
+                robot_brain =  tell_story()
+            elif "Máº¥y giá» rá»i" in text:
+                robot_brain = now.strftime("%H:%M:%S")  
+            elif "Äau Äáº§u" in text:
+                robot_brain = "Báº¡n nÃªn dÃ¹ng 1 viÃªn paradol"
+            elif"nÃ³ng Äáº§u" in text:
+                robot_brain = "Báº¡n nÃªn káº¹p nhiá»t Äá» náº¿u quÃ¡ má»©c cho phÃ©p báº¡n cáº§n Äáº¿n bÃ¡c sÄ© ngay"
+            elif "thá»i tiáº¿t" in text:
+                speak("Báº¡n muá»n há»i thá»i tiáº¿t á» thÃ nh phá» nÃ o?")
+                # city = input("ThÃ nh phá»: Háº£i PhÃ²ng ")
+                print("ThÃ nh phá»: Háº£i PhÃ²ng ")
+                weather_info = get_weather_in_haiphong()
+                robot_brain = weather_info
+            elif "táº¡m biá»t" in text:
+                robot_brain = "Háº¹n gáº·p láº¡i báº¡n sau"
+                break
+            else:
+                robot_brain = "ChÃ o minh,báº¡n cáº§n giÃºp gÃ¬ áº¡"
+
+            print(robot_brain)
+            speak(robot_brain)
+
+if __name__ == "__main__":
+    main()
